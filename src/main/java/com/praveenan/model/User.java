@@ -1,6 +1,8 @@
 package com.praveenan.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.praveenan.dto.RestaurantDto;
 import com.praveenan.enums.USER_ROLE;
 import jakarta.persistence.CascadeType;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -30,8 +33,10 @@ public class User {
 
   private String fullName;
   private String email;
+
+  @JsonProperty(access = Access.WRITE_ONLY)
   private String password;
-  private USER_ROLE role;
+  private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
 
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer", orphanRemoval = true)
