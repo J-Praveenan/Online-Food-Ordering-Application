@@ -1,11 +1,10 @@
 package com.praveenan.repository;
 
-import com.praveenan.model.Cart;
+import com.praveenan.model.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-  public Cart findByCustomerId(Long userId);
 }
