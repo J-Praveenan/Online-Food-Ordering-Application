@@ -2,6 +2,7 @@ package com.praveenan.controller;
 
 import com.praveenan.model.Cart;
 import com.praveenan.model.CartItem;
+import com.praveenan.model.User;
 import com.praveenan.request.AddCartItemRequest;
 import com.praveenan.request.UpdateCartItemRequest;
 import com.praveenan.service.CartService;
@@ -54,8 +55,8 @@ public class CartController {
   @PutMapping("/cart/clear")
   public ResponseEntity<Cart> clearCart(@RequestHeader("Authorization") String jwt)
       throws Exception {
-
-    Cart cart = cartService.clearCart(jwt);
+    User user = userService.findUserByJwtToken(jwt);
+    Cart cart = cartService.clearCart(user.getId());
     return new ResponseEntity<>(cart, HttpStatus.OK);
   }
 
@@ -63,7 +64,8 @@ public class CartController {
   public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt)
       throws Exception {
 
-    Cart cart = cartService.findCartByUserId(jwt);
+    User user = userService.findUserByJwtToken(jwt);
+    Cart cart = cartService.findCartByUserId(user.getId());
     return new ResponseEntity<>(cart, HttpStatus.OK);
   }
 
