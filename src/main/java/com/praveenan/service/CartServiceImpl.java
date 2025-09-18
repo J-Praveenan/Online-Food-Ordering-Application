@@ -6,6 +6,7 @@ import com.praveenan.model.Food;
 import com.praveenan.model.User;
 import com.praveenan.repository.CartItemRepository;
 import com.praveenan.repository.CartRepository;
+import com.praveenan.repository.UserRepository;
 import com.praveenan.request.AddCartItemRequest;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class CartServiceImpl implements CartService{
   private CartItemRepository cartItemRepository;
   @Autowired
   private FoodService foodService;
+  @Autowired
+  private UserRepository userRepository;
 
   @Override
   public CartItem addItemToCart(AddCartItemRequest request, String jwt) throws Exception {
@@ -103,15 +106,17 @@ public class CartServiceImpl implements CartService{
   }
 
   @Override
-  public Cart findCartByUserId(String  jwt) throws Exception {
-    User user = userService.findUserByJwtToken(jwt);
-    return cartRepository.findByCustomerId(user.getId());
+  public Cart findCartByUserId(Long  userId) throws Exception {
+
+    Cart cart = cartRepository.findByCustomerId(userId);
+    cart.setTotal(calculateCartTotals(cart));
+    return cart;
   }
 
   @Override
-  public Cart clearCart(String jwt) throws Exception {
-    User user = userService.findUserByJwtToken(jwt);
-    Cart cart = cartRepository.findByCustomerId(user.getId());
+  public Cart clearCart(Long userId) throws Exception {
+
+    Cart cart = cartRepository.findByCustomerId(userId);
     cart.getItems().clear();
 
     return cartRepository.save(cart);
